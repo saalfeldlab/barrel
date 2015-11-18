@@ -20,7 +20,7 @@
 
 	<artifactId>barrel_</artifactId>
 
-	<name>plugins/barrel_.jar</name>
+	<name>jars/barrel.jar</name>
 	<description>Interactive barrel distortion correction</description>
 
 	<dependencies>
@@ -37,5 +37,5 @@
 		</dependency>
 	</dependencies>
 	<groupId>org.janelia.saalfeldlab</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 </project>

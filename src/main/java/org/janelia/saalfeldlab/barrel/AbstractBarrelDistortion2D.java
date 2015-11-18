@@ -16,35 +16,37 @@
  */
 package org.janelia.saalfeldlab.barrel;
 
+import mpicbg.models.CoordinateTransform;
+
 /**
- * 2D barrel distortion
+ * Abstract base class for the two barrel distortions
  *
  * @author Stephan Saalfeld &lt;saalfelds@janelia.hhmi.org&gt;
  * @author Kie Ito &lt;itok@janelia.hhmi.org&gt;
  */
-public class BarrelDistortion2D extends AbstractBarrelDistortion2D {
+abstract public class AbstractBarrelDistortion2D implements CoordinateTransform {
 
-    /* coefficients */
-    protected double k1 = 0;
-    protected double k2 = 0;
+    /* offset */
+    protected double cx = 0;
+    protected double cy = 0;
 
-    public BarrelDistortion2D(final double width, final double height, final double k1, final double k2) {
-        super(width, height);
-        this.k1 = k1;
-        this.k2 = k2;
+    /* radius normalization */
+    protected double norm = 1.0;
+
+    public AbstractBarrelDistortion2D(final double width, final double height) {
+        setDimensions(width, height);
+    }
+
+    public void setDimensions(final double w, final double h) {
+        cx = 0.5 * w;
+        cy = 0.5 * h;
+        norm = Math.sqrt(cx * cx + cy * cy);
     }
 
     @Override
-    public void applyInPlace(final double[] p) {
-        final double x = p[0] - cx;
-        final double y = p[1] - cy;
-
-        final double r = Math.sqrt(x * x + y * y) / norm;
-        final double r2 = r * r;
-        final double r4 = r2 * r2;
-        final double ab = (1.0 + k1 * r2 + k2 * r4) / (1.0 + k1 + k2);
-
-        p[0] = cx + x * ab;
-        p[1] = cy + y * ab;
+    public double[] apply(final double[] p) {
+        final double[] q = p.clone();
+        applyInPlace(q);
+        return q;
     }
 }
